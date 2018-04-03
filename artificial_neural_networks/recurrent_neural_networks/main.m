@@ -71,6 +71,8 @@ endfor
 %            hidden_layer_size, ...
 %            output_layer_size);
 
+%fprintf('Test the cost function\n');
+%
 %J = costFunction(X_train, Y_train, ...
 %                 nn_weights_initial, ...
 %                 input_layer_size, ...
@@ -79,6 +81,7 @@ endfor
 %                 
 %fprintf('Expected loss for random predictions: %f\n', log(nb_words));        
 %fprintf('Loss: %f\n', J);
+%fflush(stdout);
 
 
 checkGradients();

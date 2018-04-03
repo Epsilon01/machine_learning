@@ -22,13 +22,24 @@ function checkGradients()
                                hidden_layer_size, ...
                                output_layer_size);
   
-  [cost grad] = costFunc(nn_weights);
+  [cost grad] = costFunctionFull(X, Y, nn_weights, ...
+                                 input_layer_size, ...
+                                 hidden_layer_size, ...
+                                 output_layer_size);
+                          
+%  num_grad = zeros(size(nn_weights));
   num_grad = computeNumericalGradients(costFunc, nn_weights);
   
-  disp('10 firsts num_grad grad');
-  disp([num_grad(1:10,:) grad(1:10,:)]);
+  disp('10 firsts results')
+  fprintf('num_grad \t grad\n');
+  start = input_layer_size*hidden_layer_size;
+  disp([num_grad grad]);
+%  for i=start:start+10
+%    fprintf('%d \t %d\n', num_grad(i,:), grad(i,:));
+%  endfor
   
-  diff = norm(num_grad - grad)/norm(num_grad+grad);
+  diff = norm(num_grad(start:start+10) - grad(start:start+10))/norm(num_grad(start:start+10) + grad(start:start+10));
+%  diff = norm(num_grad - grad)/norm(num_grad+grad);
   disp('diff '), disp(diff);
   
   fprintf('Check Gradients... Ok\n');
