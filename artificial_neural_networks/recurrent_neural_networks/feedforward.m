@@ -1,24 +1,24 @@
-function [a2, a3] = feedforward(X, ...
-                                nn_weights, ...
-                                input_layer_size, ...
-                                hidden_layer_size, ...
-                                output_layer_size)
+function [a2, a3] = feedforward(X, nn_weights, options)
+  
+  % Brief: feedforward the neural network with X and nn_weights
+  %
+  % Parameters
+  %   X           - data set
+  %   nn_weights  - weights
+  %   options     - hyperparameters
+  %
+  % Returns
+  %   a2  - outputs of the hidden layer
+  %   a3  - outputs of the neural network
+  
+  
   
   n = size(X,2); % number of words
   
-  % Weights of the 1st layer
-  W1_size = hidden_layer_size*input_layer_size;
-  W1 = reshape(nn_weights(1:W1_size), hidden_layer_size, input_layer_size);
+  [W1, Wh, W2] = paramsToStack(nn_weights, options);
   
-  % Weights of the hidden layer
-  Wh_size = hidden_layer_size*hidden_layer_size;
-  Wh = reshape(nn_weights(W1_size+1:W1_size+Wh_size), hidden_layer_size, hidden_layer_size);
-  
-  % Weights of the 2nd layer
-  W2 = reshape(nn_weights(W1_size+Wh_size+1:end), output_layer_size, hidden_layer_size);
-  
-  a2 = zeros(hidden_layer_size,n);
-  a3 = zeros(output_layer_size,n);
+  a2 = zeros(options.hlayer_size,n);
+  a3 = zeros(options.olayer_size,n);
   
   % Feedforward ----------------------------------------------------------------
   if iscell(X)
@@ -27,8 +27,8 @@ function [a2, a3] = feedforward(X, ...
     a1 = X;
   endif
   
-    
-  for t=1:n
+  
+  for t=1:n % for each word
     
     % Hidden layer
     if(t==1)
@@ -36,10 +36,11 @@ function [a2, a3] = feedforward(X, ...
     else
       z2 = W1(:,a1(t)) + Wh*a2(:,t-1);
     endif
+    
     a2(:,t) = tanh(z2);
     
     % Output layer
-    z3 = W2*a2(:,t); % size(z3) = input_layer_size x 1
+    z3 = W2*a2(:,t); % size(z3) = output_layer_size x 1
     a3(:,t) = softmax(z3);
   endfor
   

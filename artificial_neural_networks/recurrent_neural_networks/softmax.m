@@ -1,5 +1,7 @@
 function g = softmax(z)
   
-  g = exp(z) ./ sum(exp(z));
+  z = bsxfun(@minus, z, max(z, [], 1));
+  z = exp(z);  
+  g = bsxfun(@rdivide, z , sum(z));
   
 end
