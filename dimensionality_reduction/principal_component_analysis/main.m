@@ -26,8 +26,8 @@ plotEigenvectors(X,U);
 fprintf('Press any key to continue.\n');
 pause();
 
-test = U' * X_norm';
-plot2dPoints(test', 'The transformed 2D point set.');
+X_proj = projectData(X_norm, U);
+plot2dPoints(X_proj, 'The 2d points projected into the eigenspace.');
 fprintf('Press any key to continue.\n');
 pause();
 
